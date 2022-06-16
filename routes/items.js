@@ -41,10 +41,14 @@ router.post("/item", (req, res) => {
 
   let { name, price } = req.query;
   let filter = items.filter((item) => item.name === name)[0];
+
+  if (name && price && filter == undefined) {
+
   console.log(filter);
   if (status == 401) {
     body = { error: "User not authorized." };
   } else if (name && price && filter == undefined) {
+
     price = Number(price);
     let item = { name, price };
     items.push(item);
@@ -53,6 +57,24 @@ router.post("/item", (req, res) => {
   } else {
     body = { error: "Item already exists." };
     status = 400;
+  }
+  res.status(status).json(body);
+});
+
+router.delete("/item/:name", (req, res) => {
+  let status, body;
+
+  status = checkAuthentication(req.headers.authorization); //check bearer token authorized
+
+  let new_items = items.filter((data) => data.name != req.params.name);
+  if (status == 401) {
+    body = { error: "User not authorized." };
+  } else if (JSON.stringify(new_items) === JSON.stringify(items)) {
+    status = 404;
+    body = { error: "Item does not exist." };
+  } else {
+    status = 200;
+    body = { "Item Deleted": req.params.name };
   }
   res.status(status).json(body);
 });
