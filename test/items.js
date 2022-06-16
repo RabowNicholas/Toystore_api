@@ -52,14 +52,30 @@ describe("/item", function () {
     it("Post item", (done) => {
       let name = "Lego";
       let price = 9.99;
-      request.post(`/item?name=${name}&price=${price}`).end((err, res) => {
-        assert.equal(res.status, 200);
-        assert.include(res.body, {
-          name: "Lego",
-          price: 9.99,
+      request
+        .post(`/item?name=${name}&price=${price}`)
+        .set("Authorization", token)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.include(res.body, {
+            name: "Lego",
+            price: 9.99,
+          });
+          done();
         });
-        done();
-      });
+    });
+
+    it("Post duplicate item", (done) => {
+      let name = "Car";
+      let price = 2.99;
+      request
+        .post(`/item?name=${name}&price=${price}`)
+        .set("Authorization", token)
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          assert.deepEqual(res.body, { error: "Item already exists." });
+          done();
+        });
     });
 
     it("Post duplicate item", (done) => {
@@ -67,7 +83,7 @@ describe("/item", function () {
       let price = 2.99;
       request.post(`/item?name=${name}&price=${price}`).end((err, res) => {
         assert.equal(res.status, 401);
-        assert.deepEqual(res.body, { error: "Item already exists." });
+        assert.deepEqual(res.body, { error: "User not authorized." });
         done();
       });
     });
