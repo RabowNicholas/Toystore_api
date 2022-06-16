@@ -48,11 +48,32 @@ describe("/item", function () {
     });
   });
 
-  // describe("POST", function () {
-  //   it("Post item", () => {});
-  // });
-  //
-  // describe("DELETE", function () {
-  //   it("Delete Item", () => {});
-  // });
+  describe("POST", function () {
+    it("Post item", (done) => {
+      let name = "Lego";
+      let price = 9.99;
+      request.post(`/item?name=${name}&price=${price}`).end((err, res) => {
+        assert.equal(res.status, 200);
+        assert.include(res.body, {
+          name: "Lego",
+          price: 9.99,
+        });
+        done();
+      });
+    });
+
+    it("Post duplicate item", (done) => {
+      let name = "Car";
+      let price = 2.99;
+      request.post(`/item?name=${name}&price=${price}`).end((err, res) => {
+        assert.equal(res.status, 401);
+        assert.deepEqual(res.body, { error: "Item already exists." });
+        done();
+      });
+    });
+
+    // describe("DELETE", function () {
+    //   it("Delete Item", () => {});
+    // });
+  });
 });

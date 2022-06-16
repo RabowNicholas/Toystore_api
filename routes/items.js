@@ -1,11 +1,6 @@
 import express from "express";
-import bodyParser from "body-parser";
 import Toy from "../models/Toy.js";
-const app = express();
 const router = express.Router();
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 let items = [new Toy("Car", 1.99), new Toy("Barbie", 5.99)];
 
@@ -35,6 +30,24 @@ router.get("/item/:name", (req, res) => {
   } else {
     status = 200;
     body = item;
+  }
+  res.status(status).json(body);
+});
+
+router.post("/item", (req, res) => {
+  let status, body;
+  let { name, price } = req.query;
+  let filter = items.filter((item) => item.name === name)[0];
+  console.log(filter);
+  if (name && price && filter == undefined) {
+    price = Number(price);
+    let item = { name, price };
+    items.push(item);
+    body = item;
+    status = 200;
+  } else {
+    body = { error: "Item already exists." };
+    status = 401;
   }
   res.status(status).json(body);
 });
