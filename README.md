@@ -3,15 +3,11 @@
 
 This is an API for a toy store owner.
 
-More information: [https://helloreverb.com](https://helloreverb.com)
-
 Contact Info: [rabownick123@gmail.com](rabownick123@gmail.com)
 
 Version: 1.0.0
 
 ISC
-
-http://apache.org/licenses/LICENSE-2.0.html
 
 ## Access
 
