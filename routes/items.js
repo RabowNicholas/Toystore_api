@@ -36,9 +36,19 @@ router.get("/item/:name", (req, res) => {
 
 router.post("/item", (req, res) => {
   let status, body;
+
+  status = checkAuthentication(req.headers.authorization); //check bearer token authorized
+
   let { name, price } = req.query;
   let filter = items.filter((item) => item.name === name)[0];
+
   if (name && price && filter == undefined) {
+
+  console.log(filter);
+  if (status == 401) {
+    body = { error: "User not authorized." };
+  } else if (name && price && filter == undefined) {
+
     price = Number(price);
     let item = { name, price };
     items.push(item);
@@ -46,7 +56,7 @@ router.post("/item", (req, res) => {
     status = 200;
   } else {
     body = { error: "Item already exists." };
-    status = 401;
+    status = 400;
   }
   res.status(status).json(body);
 });
