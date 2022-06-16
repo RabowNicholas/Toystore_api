@@ -1,0 +1,107 @@
+---
+openapi: 3.0.0
+info:
+  title: Toystore
+  description: This is an API for a toy store owner.
+  termsOfService: http://toystore.io/terms
+  contact:
+    name: Nicholas Rabow
+    email: rabownick123@gmail.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/NICHOLASRABOW/Toystore/1.0.0
+    description: SwaggerHub API Auto Mocking
+  - url: http://localhost:3000
+tags:
+  - name: item
+    description: Everything about the store items
+paths:
+  /item:
+    get:
+      tags:
+        - item
+      summary: Find item by name
+      description: Give name of item and ToyItem object will be returned with name and price
+      operationId: findToysByName
+      parameters:
+        - name: name
+          in: query
+          description: Name value that need to be considered for filter
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful pull of toy info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200"
+    post:
+      tags:
+        - item
+      summary: Add item
+      description: Adds item to the store inventory DB. Needs to be given a name and a price
+      operationId: itemsPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/item_body"
+        required: true
+      responses:
+        "200":
+          description: successful add new item
+    delete:
+      tags:
+        - item
+      summary: Delete item from DB.
+      description: Deltem item from store DB given a name.
+      parameters:
+        - name: name
+          in: query
+          description: Name of the item to be deleted from DB.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful delete item
+components:
+  schemas:
+    Item:
+      properties:
+        toyName:
+          type: string
+          description: Name of the toy
+          example: Hot Wheelz
+        toyPrice:
+          type: number
+          description: Price of the toy
+          example: 1.99
+      description: Model containing item information
+    inline_response_200:
+      type: object
+      properties:
+        toyName:
+          type: string
+          description: Name of the toy
+        toyPrice:
+          type: number
+          description: Price of the toy
+    item_body:
+      type: object
+      properties:
+        toyName:
+          type: string
+          description: Name of the toy
+        toyPrice:
+          type: number
+          description: Price of the toy
