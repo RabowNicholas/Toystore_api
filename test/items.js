@@ -71,9 +71,40 @@ describe("/item", function () {
         done();
       });
     });
+  });
 
-    // describe("DELETE", function () {
-    //   it("Delete Item", () => {});
-    // });
+  describe("DELETE", function () {
+    it("Delete Item", (done) => {
+      let name = "Car";
+      request
+        .delete(`/item/${name}`)
+        .set("Authorization", token)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.deepEqual(res.body, { "Item Deleted": "Car" });
+          done();
+        });
+    });
+
+    it("Delete item that does not exist", (done) => {
+      let name = "Jacks";
+      request
+        .delete(`/item/${name}`)
+        .set("Authorization", token)
+        .end((err, res) => {
+          assert.equal(res.status, 404);
+          assert.deepEqual(res.body, { error: "Item does not exist." });
+          done();
+        });
+    });
+
+    it("User not authorized", (done) => {
+      let name = "Car";
+      request.delete(`/item/${name}`).end((err, res) => {
+        assert.equal(res.status, 401);
+        assert.deepEqual(res.body, { error: "User not authorized." });
+        done();
+      });
+    });
   });
 });
