@@ -42,13 +42,9 @@ router.post("/item", (req, res) => {
   let { name, price } = req.query;
   let filter = items.filter((item) => item.name === name)[0];
 
-  if (name && price && filter == undefined) {
-
-  console.log(filter);
   if (status == 401) {
     body = { error: "User not authorized." };
   } else if (name && price && filter == undefined) {
-
     price = Number(price);
     let item = { name, price };
     items.push(item);
