@@ -1,14 +1,11 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import routes from "./routes/items.js";
 const app = express();
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
 
-app.use("/", require("./routes/items"));
+app.use("/", routes);
 
-module.export = app;
+export default app;

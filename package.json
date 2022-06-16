@@ -17,5 +17,6 @@
   },
   "devDependencies": {
     "supertest": "^6.2.3"
-  }
+  },
+  "type": "module"
 }
